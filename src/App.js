@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 //import "./styles.css";
 
 const useConfirm = (message ="", onConfirm, onCancel) =>{
-  if(typeof callback !== "function" || typeof onCancel !== "function"){
+  if(typeof onConfirm !== "function" || typeof onCancel !== "function"){
     return;
   }
   
