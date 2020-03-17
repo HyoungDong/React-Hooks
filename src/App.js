@@ -1,26 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 //import "./styles.css";
 
-const useTitle = (initialvalue) =>{
-  const [title, setTitle] = useState(initialvalue);
+const useClick =(onClick) =>{
+  const element = useRef();
 
-  const updateTitle= ()=>{
-    const htmlTitle = document.querySelector("title");
-    htmlTitle.innerText = title;
-  };
-  
-  useEffect(updateTitle,[title]);
-  return setTitle;
+  useEffect(()=>{
+    if(element.current){
+      element.current.addEventListener("click", onClick);
+    }
+    return () =>{// ComponentWillUnmount 역할
+      element.current.removeEventListener("click", onClick);
+    }
+  });
+  return element;
 }
- 
-
 
 export default function App() {
-  const titleUpdater = useTitle("Loading...");
-  setTimeout(() => titleUpdater("Home"), 5000);
-  return (
+  const input = useRef();
+  const sayhello= () => console.log("say hello");
+  const title = useClick(sayhello);
+  return ( 
     <div className="App">
-    HI
+    <h1 ref = {title} > HI </h1>
+    <input ref = {input} placeholder = "la"/>
     </div>
   );
 }
