@@ -1,33 +1,34 @@
 import React, { useState, useEffect, useRef } from "react";
 //import "./styles.css";
 
-const useNetwork = (onChange)=>{
-  const [status, setStatus] = useState(navigator.onLine);
-  const handleChange = () =>{
-    if(typeof onChange === "function")
-    onChange(navigator.onLine);
-    setStatus(navigator.onLine);
+const useScroll = () =>{
+  const [state, Setstate] = useState({
+    x : 0,
+    y : 0
+  });
+  const onScroll = () =>{
+    console.log( "y",window.scrollY, "x" , window.scrollX);
+    Setstate({
+      x : window.scrollX,
+      y : window.scrollY
+    })
   }
-  useEffect(()=>{
-    window.addEventListener("online", handleChange);
-    window.addEventListener("offline", handleChange);
+  useEffect(() =>{
+    window.addEventListener("scroll", onScroll);
 
     return () =>{
-      window.removeEventListener("online", handleChange);
-      window.removeEventListener("offline", handleChange);
+      window.removeEventListener("scroll", onScroll);
     }
-  },[]);
-  return status;
+  },[])
+
+  return state;
 };
 
 export default function App() {
-  const handleNetworkChange = (online) =>{
-    console.log(online?"We just went Online":"We are Offline");
-  }
-  const onLine = useNetwork(handleNetworkChange);
+  const { y } = useScroll();
   return ( 
-    <div className="App">
-    <h1>{onLine?"Online":"Offline"}</h1>
+    <div className="App" style = {{height : "1000vh"}}>
+    <h1 style ={{position : "fixed" ,color: y>100 ? "red" : "blue"}}> Hello </h1>
     </div>
   );
 }
