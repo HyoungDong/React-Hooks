@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export const useScroll = () =>{
     const [state, Setstate] = useState({
       x : 0,

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export const useFullscreen = (callback) => {
     const element = useRef();
     const runCb = isFull => {

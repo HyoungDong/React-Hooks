@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export const useFadeIn = (duration = 1, delay =0) =>{
     const element = useRef();
     useEffect(() =>{

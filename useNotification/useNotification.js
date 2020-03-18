@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export const useNotification = (title, options) =>{
     if(!("Notification" in window)){
       return;

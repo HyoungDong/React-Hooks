@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 export const useConfirm = (message ="", onConfirm, onCancel) =>{
     if(typeof onConfirm !== "function" || typeof onCancel !== "function"){
       return;
