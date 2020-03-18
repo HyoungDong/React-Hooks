@@ -1,36 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
+import useAxios from "./useAxios"
 //import "./styles.css";
 
-const useNotification = (title, options) =>{
-  if(!("Notification" in window)){
-    return;
-  }
-  const fireNotif = () =>{
-    if(Notification.permission !== "granted"){
-      Notification.requestPermission().then((perm) =>{
-        if(perm ==="granted"){
-          new Notification(title,options);
-        }else{
-          return;
-        }
 
-      });
-    }else{
-      console.log(options);
-      new Notification(title,options)
-    }
-  }
 
-  return fireNotif;
-};
-
-export default function App() {
-  const triggerNotif = useNotification("Can ",{
-    body:"I Hate Notification"
-  });
+export default function App() {               
+  const {loading, data,refetch}= useAxios({url:"https://yts.mx/api/v2/list_movies.json"}); 
   return (
-    <div className="App" style={{ height: "1000vh" }}>
-      <button onClick = {triggerNotif}>Hello</button>
+    <div className="App" styl e={{ height: "1000vh" }}>
+      <h1 >{data?.status}</h1>
+      <h2>{loading && "Loading"}</h2>
+      <button onClick = {refetch}>Refetch</button>
     </div>
   );
 }
