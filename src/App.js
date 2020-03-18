@@ -1,34 +1,54 @@
 import React, { useState, useEffect, useRef } from "react";
 //import "./styles.css";
 
-const useScroll = () =>{
-  const [state, Setstate] = useState({
-    x : 0,
-    y : 0
-  });
-  const onScroll = () =>{
-    console.log( "y",window.scrollY, "x" , window.scrollX);
-    Setstate({
-      x : window.scrollX,
-      y : window.scrollY
-    })
-  }
-  useEffect(() =>{
-    window.addEventListener("scroll", onScroll);
-
-    return () =>{
-      window.removeEventListener("scroll", onScroll);
+const useFullscreen = (callback) => {
+  const element = useRef();
+  const runCb = isFull => {
+    if (callback && typeof callback === "function") {
+      callback(isFull);
     }
-  },[])
-
-  return state;
+  };
+  const triggerFull = () => {
+    if (element.current) {
+      if (element.current.requestFullscreen) {
+        element.current.requestFullscreen();
+      } else if (element.current.mozRequestFullScreen) {
+        element.current.mozRequestFullScreen();
+      } else if (element.current.webkitRequestFullscreen) {
+        element.current.webkitRequestFullscreen();
+      } else if (element.current.msRequestFullscreen) {
+        element.current.msRequestFullscreen();
+      }
+      runCb(true);
+    }
+  };
+  const exitFull = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+    runCb(false);
+  };
+  return { element, triggerFull, exitFull };
 };
 
 export default function App() {
-  const { y } = useScroll();
-  return ( 
-    <div className="App" style = {{height : "1000vh"}}>
-    <h1 style ={{position : "fixed" ,color: y>100 ? "red" : "blue"}}> Hello </h1>
+  const onFulls = (isFull) => {
+    console.log(isFull ? "We are Fullscreen" : "We are smallscreen");
+  }
+  const { element, triggerFull, exitFull } = useFullscreen(onFulls);
+  return (
+    <div className="App" style={{ height: "1000vh" }}>
+      <div ref={element}>
+        <img src="https://img3.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/201709/21/newsen/20170921191551900aqqr.jpg" />
+        <button onClick={exitFull}>Click to see origin screen</button>
+      </div>
+      <button onClick={triggerFull}>Click to see Full screen</button>
     </div>
   );
 }
